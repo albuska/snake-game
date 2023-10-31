@@ -36,23 +36,7 @@ function App() {
   useEffect(() => {
     if (!isStarted) return;
 
-    if (
-      snake[snake.length - 1].x === 100 ||
-      snake[snake.length - 1].x === 0 ||
-      snake[snake.length - 1].y === 100 ||
-      snake[snake.length - 1].y === -4
-    ) {
-      setGameOver(true);
-      return;
-    }
-
-    //interval needed to continuously move the snake by manipulating snake array item's x & y value
-    //every 'speed' milliseconds
-    const interval = setInterval(move, initialSnake.speed);
-    return () => clearInterval(interval);
-  });
-
-  //method to update snake array's values on keyboard event
+      //method to update snake array's values on keyboard event
   const move = () => {
     const tmpSnake = [...snake];
     let x = tmpSnake[tmpSnake.length - 1].x,
@@ -83,6 +67,23 @@ function App() {
     else setFoodPosition(randomFoodPosition());
     setSnake(tmpSnake);
   };
+
+    if (
+      snake[snake.length - 1].x === 100 ||
+      snake[snake.length - 1].x === 0 ||
+      snake[snake.length - 1].y === 100 ||
+      snake[snake.length - 1].y === -4
+    ) {
+      setGameOver(true);
+      return;
+    }
+
+    //interval needed to continuously move the snake by manipulating snake array item's x & y value
+    //every 'speed' milliseconds
+    const interval = setInterval(move, initialSnake.speed);
+    return () => clearInterval(interval);
+  }, [foodPosition.x, foodPosition.y, isStarted, lastDirection, snake]);
+
 
   return (
    <>
