@@ -24,19 +24,20 @@ align-items: center;
     font-family: inherit;
     font-size: 1.5rem;
     border-radius: 10px;
-    color: black;
+    color: #FFF;
     width: 50%;
     max-width: 150px;
     height: 50px;
     border: none;
-    background-color: #e73d9f;
+    background-color: red;
     font-weight: 600;
     z-index: 4;
     cursor: pointer;
+    margin-top: 10px;
  ` 
 
 export const Text = styled.div`
-  color: #eb2d2d;
+  color: #FFF;
   z-index: 4;
   opacity: 0.5;
 `;
@@ -53,7 +54,17 @@ export const GameOver = styled(Text)`
 export const CountBox = styled.div`
   position: absolute;
   font-size: 2rem;
-  bottom: 0px;
+  right: 10px;
+  bottom: -40px;
+  color: #eb2d2d;
+  opacity: 0.5;
+`;
+
+export const NameBox = styled.div`
+  position: absolute;
+  font-size: 2rem;
+  left: 10px;
+  bottom: -40px;
   color: #eb2d2d;
   opacity: 0.5;
 `;

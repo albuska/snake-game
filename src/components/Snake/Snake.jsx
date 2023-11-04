@@ -9,7 +9,7 @@ export const Snake = ({ snake }) => {
           style={{
             width: "15px",
             height: "15px",
-            backgroundColor: "#e7da3d",
+            backgroundColor: "#FFFFFF",
             margin: "5px",
             position: "absolute",
             left: `${box.x}%`,

@@ -4,6 +4,7 @@ import { Food } from "./components/Food/Food";
 import { Snake } from "./components/Snake/Snake";
 import {
   AppContainer,
+  NameBox,
   CountBox,
   ArrowMsg,
   GameOver,
@@ -15,9 +16,19 @@ import {
   ButtonBox,
 } from "./App.styled";
 import { GlobalStyle } from "./components/GlobalStyles";
+import appleImg from "./assets/images/apple.png";
+import pearImg from "./assets/images/pear.png";
+import strawberryImg from "./assets/images/strawberry.png";
+
+const fruits = [appleImg, pearImg, strawberryImg];
+
+const getRandomFruit = () => {
+  const randomIndex = Math.floor(Math.random() * fruits.length);
+  return fruits[randomIndex];
+};
 
 const randomFoodPosition = () => {
-  const pos = { x: 0, y: 0 };
+  const pos = { x: 0, y: 0, image: getRandomFruit() };
   let x = Math.floor(Math.random() * 96);
   let y = Math.floor(Math.random() * 96);
   pos.x = x - (x % 4);
@@ -42,6 +53,8 @@ function App() {
   const [isStarted, setIsStarted] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [playerName, setPlayerName] = useState("");
+  const [newScore, setNewScore] = useState(0);
+  const [totalScore, setTotalScore] = useState(0);
 
   const playgroundRef = useRef();
 
@@ -53,10 +66,10 @@ function App() {
 
   const handleSave = async () => {
     try {
-      await axios.post("/api/games/createGame", { playerName });
-      console.log("Success");
-      setIsStarted(true);
-      playgroundRef.current.focus();
+      await axios.post("/api/games/createGame", {
+        player_name: playerName,
+        score: totalScore,
+      });
     } catch (error) {
       console.error("Помилка при відправці даних на сервер:", error);
     }
@@ -65,9 +78,9 @@ function App() {
   useEffect(() => {
     if (!isStarted) return;
 
-    //method to update snake array's values on keyboard event
     const move = () => {
       const tmpSnake = [...snake];
+
       let x = tmpSnake[tmpSnake.length - 1].x,
         y = tmpSnake[tmpSnake.length - 1].y;
       switch (lastDirection) {
@@ -107,11 +120,32 @@ function App() {
       return;
     }
 
-    //interval needed to continuously move the snake by manipulating snake array item's x & y value
-    //every 'speed' milliseconds
+    calculateScore(snake);
+
     const interval = setInterval(move, initialSnake.speed);
     return () => clearInterval(interval);
   }, [foodPosition.x, foodPosition.y, isStarted, lastDirection, snake]);
+
+  useEffect(() => {
+    setTotalScore((prevTotal) => prevTotal + newScore);
+  }, [newScore]);
+
+  const calculateScore = (collectedFruits) => {
+    let newScore = 0;
+
+    if (collectedFruits.length === 4) {
+      newScore = 1;
+    } else if (collectedFruits.length === 5) {
+      newScore = 3;
+    } else if (collectedFruits.length > 5) {
+      newScore += 5;
+    }
+
+    setNewScore(newScore);
+  };
+
+  console.log("snake", snake);
+  console.log("score", newScore);
 
   return (
     <>
@@ -120,7 +154,12 @@ function App() {
         ref={playgroundRef}
         tabIndex={0}
       >
-        {isStarted && <CountBox> score: {snake.length - 3}</CountBox>}
+        {isStarted && (
+          <div style={{ display: "flex" }}>
+            <NameBox>name: {playerName}</NameBox>
+            <CountBox> score: {totalScore}</CountBox>
+          </div>
+        )}
         {!isStarted && (
           <Backdrop>
             <Modal>
@@ -133,7 +172,13 @@ function App() {
               </InputBox>
               {playerName && !isStarted && (
                 <ButtonBox>
-                  <Button onClick={handleSave} type="submit">
+                  <Button
+                    onClick={() => {
+                      setIsStarted(true);
+                      playgroundRef.current.focus();
+                    }}
+                    type="submit"
+                  >
                     Start
                   </Button>
                   && <ArrowMsg>Press Arrows keys to play!</ArrowMsg>
@@ -151,11 +196,19 @@ function App() {
                 setGameOver(false);
                 setSnake(initialSnake.snake);
                 setLastDirection(initialSnake.direction);
-                // playgroundRef.current.focus();
+                playgroundRef.current.focus();
+                setTotalScore(0);
               }}
               type="submit"
             >
               Restart
+            </Button>
+            <Button
+              style={{ backgroundColor: "green", color: "#FFF" }}
+              onClick={handleSave}
+              type="submit"
+            >
+              Close
             </Button>
           </>
         )}
