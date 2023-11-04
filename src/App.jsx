@@ -45,6 +45,8 @@ function App() {
 
   const playgroundRef = useRef();
 
+  axios.defaults.baseURL = "albuska.github.io/snake-game";
+
   const handleNameChange = (e) => {
     setPlayerName(e.target.value);
   };
