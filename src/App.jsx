@@ -45,7 +45,7 @@ function App() {
 
   const playgroundRef = useRef();
 
-  axios.defaults.baseURL = "albuska.github.io/snake-game";
+  axios.defaults.baseURL = "https://snake-game-backend-three.vercel.app";
 
   const handleNameChange = (e) => {
     setPlayerName(e.target.value);
