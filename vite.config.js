@@ -5,4 +5,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: "/snake-game/", 
+  server: {
+    open: '/snake-game/',
+    port: 3000,
+  },
 })

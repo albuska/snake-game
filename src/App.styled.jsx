@@ -13,6 +13,13 @@ export const AppContainer = styled.div`
   border-radius: 10px;
 `;
 
+export const ButtonBox = styled.div`
+ margin-top : 50px;
+ display: flex;
+ flex-direction: column;
+align-items: center;
+`
+
  export const Button = styled.button`
     font-family: inherit;
     font-size: 1.5rem;
@@ -49,4 +56,48 @@ export const CountBox = styled.div`
   bottom: 0px;
   color: #eb2d2d;
   opacity: 0.5;
+`;
+
+export const Backdrop = styled.div`
+  width: 100%;
+  height: 100vh;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1200;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(97, 97, 97, 0.6);
+  backdrop-filter: blur(4px);
+`;
+
+export const Modal = styled.div`
+  width: 380px;
+  padding-top: 50px;
+  padding-bottom: 60px;
+  position: relative;
+  border-radius: 30px;
+  background-color: #000;
+  height: 194px;
+`;
+
+export const InputBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const Input = styled.input`
+  width: 250px;
+  height: 40px;
+  text-align: center;
+  background-color: transparent;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 14px;
+  letter-spacing: 0.28px;
 `;
