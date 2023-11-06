@@ -14,11 +14,22 @@ import {
   InputBox,
   Modal,
   ButtonBox,
+  TitleRecord,
+  ModalRecord,
+  ThTable,
+  TdTable,
+  Table,
+  TrTable,
+  Icon,
+  IconPause,
 } from "./App.styled";
 import { GlobalStyle } from "./components/GlobalStyles";
 import appleImg from "./assets/images/apple.png";
 import pearImg from "./assets/images/pear.png";
 import strawberryImg from "./assets/images/strawberry.png";
+import iconCross from "./assets/icons/cross.svg";
+import iconPause from "./assets/icons/pause.svg";
+import iconPlay from "./assets/icons/play.svg";
 
 const fruits = [appleImg, pearImg, strawberryImg];
 
@@ -43,7 +54,7 @@ const initialSnake = {
     { x: 8, y: 0 },
   ],
   direction: "ArrowRight",
-  speed: 100,
+  speed: 150,
 };
 
 function App() {
@@ -53,8 +64,11 @@ function App() {
   const [isStarted, setIsStarted] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [playerName, setPlayerName] = useState("");
-  const [newScore, setNewScore] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
+  const [isRecordsVisible, setRecordsVisible] = useState(false);
+  const [listOfBestPlayers, setListOfBestPlayers] = useState([]);
+  const [isPaused, setIsPaused] = useState(false);
+  const [eatenFruits, setEatenFruits] = useState(0);
 
   const playgroundRef = useRef();
 
@@ -70,13 +84,52 @@ function App() {
         player_name: playerName,
         score: totalScore,
       });
+      setRecordsVisible(true);
     } catch (error) {
       console.error("Помилка при відправці даних на сервер:", error);
     }
   };
 
+  const togglePause = () => {
+    setIsPaused((prev) => !prev);
+  };
+
+  function checkSelfCollision(snake) {
+    const head = snake[snake.length - 1];
+
+    for (let i = 0; i < snake.length - 1; i++) {
+      const segment = snake[i];
+      if (head.x === segment.x && head.y === segment.y) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   useEffect(() => {
-    if (!isStarted) return;
+    const handleKeyPress = (event) => {
+      if (event.key === "Enter") {
+        togglePause();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await axios.get("/api/games/bestPlayers");
+      setListOfBestPlayers(data.players);
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!isStarted || isPaused) return;
 
     const move = () => {
       const tmpSnake = [...snake];
@@ -106,7 +159,11 @@ function App() {
       });
 
       if (x !== foodPosition.x || y !== foodPosition.y) tmpSnake.shift();
-      else setFoodPosition(randomFoodPosition());
+      else {
+        setFoodPosition(randomFoodPosition());
+        setEatenFruits(eatenFruits + 1);
+      }
+
       setSnake(tmpSnake);
     };
 
@@ -120,32 +177,36 @@ function App() {
       return;
     }
 
-    calculateScore(snake);
-
-    const interval = setInterval(move, initialSnake.speed);
-    return () => clearInterval(interval);
-  }, [foodPosition.x, foodPosition.y, isStarted, lastDirection, snake]);
+    if (totalScore <= 50) {
+      const interval = setInterval(move, initialSnake.speed);
+      return () => clearInterval(interval);
+    } else if (totalScore <= 100) {
+      const interval = setInterval(move, initialSnake.speed - 50);
+      return () => clearInterval(interval);
+    } else if (totalScore <= 150) {
+      const interval = setInterval(move, initialSnake.speed - 100);
+      return () => clearInterval(interval);
+    }
+  }, [
+    eatenFruits,
+    foodPosition.x,
+    foodPosition.y,
+    isPaused,
+    isStarted,
+    lastDirection,
+    snake,
+    totalScore,
+  ]);
 
   useEffect(() => {
-    setTotalScore((prevTotal) => prevTotal + newScore);
-  }, [newScore]);
-
-  const calculateScore = (collectedFruits) => {
-    let newScore = 0;
-
-    if (collectedFruits.length === 4) {
-      newScore = 1;
-    } else if (collectedFruits.length === 5) {
-      newScore = 3;
-    } else if (collectedFruits.length > 5) {
-      newScore += 5;
+    if (eatenFruits === 1) {
+      setTotalScore((prev) => prev + 1);
+    } else if (eatenFruits === 2) {
+      setTotalScore((prev) => prev + 5);
+    } else if (eatenFruits >= 3) {
+      setTotalScore((prev) => prev + 10);
     }
-
-    setNewScore(newScore);
-  };
-
-  console.log("snake", snake);
-  console.log("score", newScore);
+  }, [eatenFruits]);
 
   return (
     <>
@@ -155,10 +216,33 @@ function App() {
         tabIndex={0}
       >
         {isStarted && (
-          <div style={{ display: "flex" }}>
-            <NameBox>name: {playerName}</NameBox>
-            <CountBox> score: {totalScore}</CountBox>
-          </div>
+          <>
+            <div>
+              <NameBox>
+                name: <span style={{ color: "#FFF" }}>{playerName}</span>
+              </NameBox>
+              <IconPause onClick={togglePause}>
+                {isPaused ? (
+                  <use
+                    href={`${iconPlay}#blue_copy`}
+                    fill="#FFF"
+                    width="35px"
+                    height="35px"
+                  />
+                ) : (
+                  <use
+                    href={`${iconPause}#Capa_2`}
+                    fill="#FFF"
+                    width="20px"
+                    height="20px"
+                  />
+                )}
+              </IconPause>
+              <CountBox>
+                score: <span style={{ color: "#FFF" }}>{totalScore}</span>
+              </CountBox>
+            </div>
+          </>
         )}
         {!isStarted && (
           <Backdrop>
@@ -170,7 +254,7 @@ function App() {
                   onChange={handleNameChange}
                 />
               </InputBox>
-              {playerName && !isStarted && (
+              {playerName && (
                 <ButtonBox>
                   <Button
                     onClick={() => {
@@ -185,6 +269,43 @@ function App() {
                 </ButtonBox>
               )}
             </Modal>
+          </Backdrop>
+        )}
+        {isRecordsVisible && (
+          <Backdrop>
+            <ModalRecord>
+              <TitleRecord>List of record holders</TitleRecord>
+              <Table>
+                <thead>
+                  <TrTable>
+                    <ThTable>№</ThTable>
+                    <ThTable>Name</ThTable>
+                    <ThTable>Scores</ThTable>
+                  </TrTable>
+                </thead>
+                <tbody>
+                  {listOfBestPlayers.map((item, idx) => {
+                    return (
+                      <TrTable key={idx}>
+                        <TdTable>{idx + 1}</TdTable>
+                        <TdTable>{item.player_name}</TdTable>
+                        <TdTable>{item.score}</TdTable>
+                      </TrTable>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </ModalRecord>
+            <Icon
+              width="15px"
+              height="15px"
+              onClick={() => {
+                setIsStarted(false);
+                setRecordsVisible(false);
+              }}
+            >
+              <use href={`${iconCross}#Capa_1`} />
+            </Icon>
           </Backdrop>
         )}
         {gameOver && (
