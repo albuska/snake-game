@@ -94,18 +94,18 @@ function App() {
     setIsPaused((prev) => !prev);
   };
 
-  function checkSelfCollision(snake) {
-    const head = snake[snake.length - 1];
+  // function checkSelfCollision(snake) {
+  //   const head = snake[snake.length - 1];
 
-    for (let i = 0; i < snake.length - 1; i++) {
-      const segment = snake[i];
-      if (head.x === segment.x && head.y === segment.y) {
-        return true;
-      }
-    }
+  //   for (let i = 0; i < snake.length - 1; i++) {
+  //     const segment = snake[i];
+  //     if (head.x === segment.x && head.y === segment.y) {
+  //       return true;
+  //     }
+  //   }
 
-    return false;
-  }
+  //   return false;
+  // }
 
   useEffect(() => {
     const handleKeyPress = (event) => {
