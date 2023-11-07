@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 
-export const Snake = ({ snake }) => {
+export const Snake = ({ snake, isStarted }) => {
 
   return (
     <div>
       {snake.map((box, i) => (
         <div key={i}
           style={{
+            display: isStarted ? "block" : "none",
             width: "15px",
             height: "15px",
             backgroundColor: "#FFFFFF",
@@ -23,5 +24,6 @@ export const Snake = ({ snake }) => {
 }
 
 Snake.propTypes = {
-  snake: PropTypes.any.isRequired,
+  snake: PropTypes.array.isRequired,
+  isStarted: PropTypes.bool.isRequired
 };

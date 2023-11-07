@@ -4,7 +4,7 @@ import { Food } from "./components/Food/Food";
 import { Snake } from "./components/Snake/Snake";
 import {
   AppContainer,
-  NameBox,
+  // NameBox,
   CountBox,
   ArrowMsg,
   GameOver,
@@ -12,7 +12,7 @@ import {
   Backdrop,
   Input,
   InputBox,
-  Modal,
+  // Modal,
   ButtonBox,
   TitleRecord,
   ModalRecord,
@@ -22,6 +22,7 @@ import {
   TrTable,
   Icon,
   IconPause,
+  IconYes,
 } from "./App.styled";
 import { GlobalStyle } from "./components/GlobalStyles";
 import appleImg from "./assets/images/apple.png";
@@ -30,6 +31,7 @@ import strawberryImg from "./assets/images/strawberry.png";
 import iconCross from "./assets/icons/cross.svg";
 import iconPause from "./assets/icons/pause.svg";
 import iconPlay from "./assets/icons/play.svg";
+import iconYes from "./assets/icons/yes.svg";
 
 const fruits = [appleImg, pearImg, strawberryImg];
 
@@ -54,7 +56,7 @@ const initialSnake = {
     { x: 8, y: 0 },
   ],
   direction: "ArrowRight",
-  speed: 150,
+  speed: 200,
 };
 
 function App() {
@@ -69,14 +71,11 @@ function App() {
   const [listOfBestPlayers, setListOfBestPlayers] = useState([]);
   const [isPaused, setIsPaused] = useState(false);
   const [eatenFruits, setEatenFruits] = useState(0);
+  const [isDisabled, setIsDisabled] = useState(true);
 
   const playgroundRef = useRef();
 
   axios.defaults.baseURL = "https://snake-game-backend-three.vercel.app";
-
-  const handleNameChange = (e) => {
-    setPlayerName(e.target.value);
-  };
 
   const handleSave = async () => {
     try {
@@ -85,6 +84,12 @@ function App() {
         score: totalScore,
       });
       setRecordsVisible(true);
+      setGameOver(false);
+      setIsStarted(false); 
+      setSnake(initialSnake.snake);
+      setLastDirection(initialSnake.direction); 
+      setPlayerName(""); 
+      setTotalScore(0); 
     } catch (error) {
       console.error("Помилка при відправці даних на сервер:", error);
     }
@@ -94,32 +99,39 @@ function App() {
     setIsPaused((prev) => !prev);
   };
 
-  // function checkSelfCollision(snake) {
-  //   const head = snake[snake.length - 1];
+  function checkSelfCollision(snake) {
+    const head = snake[snake.length - 1];
 
-  //   for (let i = 0; i < snake.length - 1; i++) {
-  //     const segment = snake[i];
-  //     if (head.x === segment.x && head.y === segment.y) {
-  //       return true;
-  //     }
-  //   }
+    for (let i = 0; i < snake.length - 1; i++) {
+      const segment = snake[i];
+      if (head.x === segment.x && head.y === segment.y) {
+        return true;
+      }
+    }
 
-  //   return false;
-  // }
+    return false;
+  }
 
   useEffect(() => {
-    const handleKeyPress = (event) => {
-      if (event.key === "Enter") {
-        togglePause();
-      }
-    };
+    if (checkSelfCollision(snake)) {
+      setGameOver(true);
+      return;
+    }
+  }, [snake]);
 
-    document.addEventListener("keydown", handleKeyPress);
+  // useEffect(() => {
+  //   const handleKeyPress = (event) => {
+  //     if (event.key === "Enter") {
+  //       togglePause();
+  //     }
+  //   };
 
-    return () => {
-      document.removeEventListener("keydown", handleKeyPress);
-    };
-  }, []);
+  //   document.addEventListener("keydown", handleKeyPress);
+
+  //   return () => {
+  //     document.removeEventListener("keydown", handleKeyPress);
+  //   };
+  // }, [gameOver]);
 
   useEffect(() => {
     (async () => {
@@ -136,6 +148,9 @@ function App() {
 
       let x = tmpSnake[tmpSnake.length - 1].x,
         y = tmpSnake[tmpSnake.length - 1].y;
+
+      console.log("x", x);
+      console.log("y", y);
       switch (lastDirection) {
         case "ArrowUp":
           y -= 4;
@@ -171,22 +186,27 @@ function App() {
       snake[snake.length - 1].x === 100 ||
       snake[snake.length - 1].x === 0 ||
       snake[snake.length - 1].y === 100 ||
-      snake[snake.length - 1].y === -4
+      snake[snake.length - 1].y === -4 ||
+      checkSelfCollision(snake)
     ) {
+      console.log("Game over condition is met");
       setGameOver(true);
       return;
     }
 
+    let speed = initialSnake.speed;
+
     if (totalScore <= 50) {
-      const interval = setInterval(move, initialSnake.speed);
-      return () => clearInterval(interval);
+      speed -= 0;
     } else if (totalScore <= 100) {
-      const interval = setInterval(move, initialSnake.speed - 50);
-      return () => clearInterval(interval);
+      speed -= 50;
     } else if (totalScore <= 150) {
-      const interval = setInterval(move, initialSnake.speed - 100);
-      return () => clearInterval(interval);
+      speed -= 100;
     }
+
+    const interval = setInterval(move, speed);
+
+    return () => clearInterval(interval);
   }, [
     eatenFruits,
     foodPosition.x,
@@ -208,6 +228,155 @@ function App() {
     }
   }, [eatenFruits]);
 
+  // return (
+  //   <>
+  //     <AppContainer
+  //       onKeyDown={(e) => setLastDirection(e.key)}
+  //       ref={playgroundRef}
+  //       tabIndex={0}
+  //     >
+  //       <>
+  //         <div>
+  //           <NameBox>
+  //             name: <span style={{ color: "#FFF" }}>{playerName}</span>
+  //           </NameBox>
+  //           {isStarted && (
+  //             <IconPause onClick={togglePause}>
+  //               {isPaused ? (
+  //                 <use
+  //                   href={`${iconPlay}#blue_copy`}
+  //                   fill="#FFF"
+  //                   width="35px"
+  //                   height="35px"
+  //                 />
+  //               ) : (
+  //                 <use
+  //                   href={`${iconPause}#Capa_2`}
+  //                   fill="#FFF"
+  //                   width="20px"
+  //                   height="20px"
+  //                 />
+  //               )}
+  //             </IconPause>
+  //           )}
+
+  //           <CountBox>
+  //             score: <span style={{ color: "#FFF" }}>{totalScore}</span>
+  //           </CountBox>
+  //         </div>
+  //       </>
+  //       <InputBox>
+  //         <Input
+  //           type="text"
+  //           placeholder="Введіть ім'я гравця"
+  //           onChange={(e) => setPlayerName(e.target.value)}
+  //         />
+  //         <IconYes
+  //           width="15px"
+  //           height="15px"
+  //           onClick={() => setIsDisabled(false)}
+  //         >
+  //           <use
+  //             href={`${iconYes}#icon_yes`}
+  //             fill={playerName ? "#FFF" : "red"}
+  //             width="20px"
+  //             height="20px"
+  //           />
+  //         </IconYes>
+  //       </InputBox>
+
+  //       {!isStarted && (
+  //         <ButtonBox>
+  //           <Button
+  //             onClick={() => {
+  //                 setIsStarted(true);
+  //                 playgroundRef.current.focus();
+
+  //             }}
+  //             type="submit"
+  //             style={{ backgroundColor: isDisabled ? "grey" : "red" }}
+  //             disabled={isDisabled}
+  //             // type="button"
+  //           >
+  //             Start
+  //           </Button>
+  //           && <ArrowMsg>Press Arrows keys to play!</ArrowMsg>
+  //         </ButtonBox>
+  //       )}
+
+  //       {isRecordsVisible && (
+  //         <Backdrop>
+  //           <ModalRecord>
+  //             <TitleRecord>List of record holders</TitleRecord>
+  //             <Table>
+  //               <thead>
+  //                 <TrTable>
+  //                   <ThTable>№</ThTable>
+  //                   <ThTable>Name</ThTable>
+  //                   <ThTable>Scores</ThTable>
+  //                 </TrTable>
+  //               </thead>
+  //               <tbody>
+  //                 {listOfBestPlayers.map((item, idx) => {
+  //                   return (
+  //                     <TrTable key={idx}>
+  //                       <TdTable>{idx + 1}</TdTable>
+  //                       <TdTable>{item.player_name}</TdTable>
+  //                       <TdTable>{item.score}</TdTable>
+  //                     </TrTable>
+  //                   );
+  //                 })}
+  //               </tbody>
+  //             </Table>
+  //           </ModalRecord>
+  //           <Icon
+  //             width="15px"
+  //             height="15px"
+  //             onClick={() => {
+  //               setIsStarted(false);
+  //               setRecordsVisible(false);
+  //             }}
+  //           >
+  //             <use href={`${iconCross}#Capa_1`} />
+  //           </Icon>
+  //         </Backdrop>
+  //       )}
+  //       {gameOver && (
+  //         <>
+  //           <GameOver>Game Over!</GameOver>
+  //           {/* <Button
+  //             onClick={() => {
+  //               setIsStarted(true);
+  //               setGameOver(false);
+  //               setSnake(initialSnake.snake);
+  //               setLastDirection(initialSnake.direction);
+  //               playgroundRef.current.focus();
+  //               setTotalScore(0);
+  //             }}
+  //             type="submit"
+  //           >
+  //             Restart
+  //           </Button> */}
+  //           <Button
+  //             style={{ backgroundColor: "green", color: "#FFF" }}
+  //             onClick={handleSave}
+  //             type="submit"
+  //           >
+  //             Close
+  //           </Button>
+  //         </>
+  //       )}
+  //       <Snake snake={snake} lastDirection={lastDirection} />
+  //       {!gameOver && (
+  //         <>
+  //           <Food position={foodPosition} />
+  //         </>
+  //       )}
+  //     </AppContainer>
+  //     <GlobalStyle />
+  //   </>
+  // );
+
   return (
     <>
       <AppContainer
@@ -215,12 +384,9 @@ function App() {
         ref={playgroundRef}
         tabIndex={0}
       >
-        {isStarted && (
-          <>
-            <div>
-              <NameBox>
-                name: <span style={{ color: "#FFF" }}>{playerName}</span>
-              </NameBox>
+        <>
+          <div>
+            {isStarted && (
               <IconPause onClick={togglePause}>
                 {isPaused ? (
                   <use
@@ -238,39 +404,31 @@ function App() {
                   />
                 )}
               </IconPause>
-              <CountBox>
-                score: <span style={{ color: "#FFF" }}>{totalScore}</span>
-              </CountBox>
-            </div>
-          </>
-        )}
+            )}
+
+            <CountBox>
+              score: <span style={{ color: "#FFF" }}>{totalScore}</span>
+            </CountBox>
+          </div>
+        </>
+
         {!isStarted && (
-          <Backdrop>
-            <Modal>
-              <InputBox>
-                <Input
-                  type="text"
-                  placeholder="Введіть ім'я гравця"
-                  onChange={handleNameChange}
-                />
-              </InputBox>
-              {playerName && (
-                <ButtonBox>
-                  <Button
-                    onClick={() => {
-                      setIsStarted(true);
-                      playgroundRef.current.focus();
-                    }}
-                    type="submit"
-                  >
-                    Start
-                  </Button>
-                  && <ArrowMsg>Press Arrows keys to play!</ArrowMsg>
-                </ButtonBox>
-              )}
-            </Modal>
-          </Backdrop>
+          <ButtonBox>
+            <Button
+              onClick={() => {
+                setIsStarted(true);
+                playgroundRef.current.focus();
+              }}
+              type="submit"
+              style={{ backgroundColor: "red" }}
+              // type="button"
+            >
+              Start
+            </Button>
+            && <ArrowMsg>Press Arrows keys to play!</ArrowMsg>
+          </ButtonBox>
         )}
+
         {isRecordsVisible && (
           <Backdrop>
             <ModalRecord>
@@ -311,32 +469,38 @@ function App() {
         {gameOver && (
           <>
             <GameOver>Game Over!</GameOver>
+            <InputBox>
+              <Input
+                type="text"
+                placeholder="Введіть ім'я гравця"
+                onChange={(e) => {
+                  setPlayerName(e.target.value);
+                  setIsDisabled(false);
+                }}
+              />
+              <IconYes>
+                <use
+                  href={`${iconYes}#icon_yes`}
+                  fill={!playerName ? "grey" : "green"}
+                  width="20px"
+                  height="20px"
+                />
+              </IconYes>
+            </InputBox>
             <Button
-              onClick={() => {
-                setIsStarted(true);
-                setGameOver(false);
-                setSnake(initialSnake.snake);
-                setLastDirection(initialSnake.direction);
-                playgroundRef.current.focus();
-                setTotalScore(0);
-              }}
-              type="submit"
-            >
-              Restart
-            </Button>
-            <Button
-              style={{ backgroundColor: "green", color: "#FFF" }}
+              style={{ backgroundColor: isDisabled ? "grey" : "green", color: "#FFF" }}
               onClick={handleSave}
               type="submit"
+              disabled={isDisabled}
             >
               Close
             </Button>
           </>
         )}
-        <Snake snake={snake} lastDirection={lastDirection} />
+ <Snake snake={snake} lastDirection={lastDirection} isStarted={isStarted}/>
         {!gameOver && (
           <>
-            <Food position={foodPosition} />
+          && <Food position={foodPosition} isStarted={isStarted}/>
           </>
         )}
       </AppContainer>

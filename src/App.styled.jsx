@@ -29,7 +29,6 @@ export const Button = styled.button`
   max-width: 150px;
   height: 50px;
   border: none;
-  background-color: red;
   font-weight: 600;
   z-index: 4;
   cursor: pointer;
@@ -101,15 +100,35 @@ export const ModalRecord = styled(Modal)`
   /* position: relative; */
 `;
 
+// export const InputBox = styled.div`
+//  display: flex;
+// position: absolute;
+// top: -15%; 
+//   background-color: #000;
+// `;
+
+// export const Input = styled.input`
+//   width: 250px;
+//   height: 30px;
+//   text-align: center;
+//   background-color: transparent;
+//   border-radius: 10px;
+//   color: #ffffff;
+//   font-size: 14px;
+//   letter-spacing: 0.28px;
+// `;
+
 export const InputBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+width: 250px;
+ display: flex;
+ margin-top: 25px;
+ margin-bottom: 25px;
+  background-color: #000;
 `;
 
 export const Input = styled.input`
-  width: 250px;
-  height: 40px;
+  width: 100%;
+  height: 30px;
   text-align: center;
   background-color: transparent;
   border-radius: 10px;
@@ -156,14 +175,29 @@ export const TdTable = styled.td`
 
 export const Icon = styled.svg`
   position: absolute;
-  top: 31%;
-  right: 35%;
+  top: 36%;
+  right: 38%;
   cursor: pointer;
   `
 
+// export const IconYes = styled.svg`
+// position: absolute;
+// top: 25%;
+// right: 10%;
+// cursor: pointer;
+// `
+
+export const IconYes = styled.svg`
+position: absolute;
+top: 47%;
+right: -27%;
+cursor: pointer;
+`
+
+
 export const IconPause = styled.svg`
 position: absolute;
-  left: 55%;
+  left: 45%;
   bottom: -32%;
 cursor: pointer;
 `

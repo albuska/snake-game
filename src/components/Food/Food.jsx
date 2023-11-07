@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-export const Food = ({ position }) => {
+export const Food = ({ position, isStarted }) => {
   return (
     <img
     width={25}
@@ -8,6 +8,7 @@ export const Food = ({ position }) => {
     src={position.image}
     alt="Food"
     style={{
+      display: isStarted ? "block" : "none",
       margin: "3px",
       position: "absolute",
       left: `${position.x}%`,
@@ -24,4 +25,5 @@ Food.propTypes = {
       y: PropTypes.number.isRequired,
       image: PropTypes.string.isRequired
     }).isRequired,
+    isStarted: PropTypes.bool.isRequired
   };
