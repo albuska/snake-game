@@ -13,6 +13,23 @@ export const AppContainer = styled.div`
   border-radius: 10px;
 `;
 
+export const Title = styled.h1`
+  position: absolute;
+  left: -90%;
+  top: 40%; 
+  text-transform: uppercase;
+  color: #ffffff;
+  font-size: 250px;
+  font-weight: 900;
+`;
+
+export const SnakeImg = styled.img`
+  position: absolute;
+  left: -90%;
+  top: 10%;
+  width: 400px;
+`;
+
 export const PauseAndScoreBox = styled.div`
   position: absolute;
   top: -10%;
@@ -66,7 +83,7 @@ export const CountBox = styled.div`
 
 export const ScoreText = styled.p`
   margin: 0;
-`
+`;
 
 export const NameBox = styled.div`
   position: absolute;

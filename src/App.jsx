@@ -6,6 +6,7 @@ import { Food } from "./components/Food/Food";
 import { Snake } from "./components/Snake/Snake";
 import {
   AppContainer,
+  Title,
   CountBox,
   ArrowMsg,
   GameOver,
@@ -23,7 +24,9 @@ import {
   Icon,
   IconPause,
   IconYes,
-  PauseAndScoreBox, ScoreText
+  PauseAndScoreBox,
+  ScoreText,
+  SnakeImg,
 } from "./App.styled";
 import { GlobalStyle } from "./components/GlobalStyles";
 import appleImg from "./assets/images/apple.png";
@@ -33,6 +36,7 @@ import iconCross from "./assets/icons/cross.svg";
 import iconPause from "./assets/icons/pause.svg";
 import iconPlay from "./assets/icons/play.svg";
 import iconYes from "./assets/icons/yes.svg";
+import snakeImg from "./assets/images/snake.png";
 
 const fruits = [appleImg, pearImg, strawberryImg];
 
@@ -237,11 +241,12 @@ function App() {
   }, [eatenFruits]);
 
   return (
-    <div>
+    <div style={{position: "relative"}}>
+       <SnakeImg src={snakeImg} alt="SnakeImg" />
+       {!isStarted &&  <Title>snake</Title>}
       <AppContainer ref={playgroundRef}>
-      <PauseAndScoreBox>
+        <PauseAndScoreBox>
           {isStarted && (
-        
             <IconPause onClick={togglePause}>
               {isPaused ? (
                 <use
@@ -259,12 +264,12 @@ function App() {
                 />
               )}
             </IconPause>
- 
-      
           )}
-              <CountBox>
-          <ScoreText>score: <span style={{ color: "#FFF" }}>{totalScore}</span></ScoreText>
-        </CountBox>
+          <CountBox>
+            <ScoreText>
+              score: <span style={{ color: "#FFF" }}>{totalScore}</span>
+            </ScoreText>
+          </CountBox>
         </PauseAndScoreBox>
 
         {!isStarted && (
