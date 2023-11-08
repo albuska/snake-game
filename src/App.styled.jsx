@@ -13,6 +13,12 @@ export const AppContainer = styled.div`
   border-radius: 10px;
 `;
 
+export const PauseAndScoreBox = styled.div`
+  position: absolute;
+  top: -10%;
+  right: 50%;
+`;
+
 export const ButtonBox = styled.div`
   margin-top: 50px;
   display: flex;
@@ -51,13 +57,16 @@ export const GameOver = styled(Text)`
 `;
 
 export const CountBox = styled.div`
-  position: absolute;
+  display: flex;
   font-size: 2rem;
-  right: 10px;
-  bottom: -40px;
+  gap: 10px;
   color: #eb2d2d;
   opacity: 0.5;
 `;
+
+export const ScoreText = styled.p`
+  margin: 0;
+`
 
 export const NameBox = styled.div`
   position: absolute;
@@ -89,7 +98,6 @@ export const Modal = styled.div`
   width: 380px;
   padding-top: 50px;
   padding-bottom: 60px;
-  /* position: relative; */
   border-radius: 30px;
   background-color: #000;
   height: 194px;
@@ -97,32 +105,13 @@ export const Modal = styled.div`
 
 export const ModalRecord = styled(Modal)`
   width: 500px;
-  /* position: relative; */
 `;
 
-// export const InputBox = styled.div`
-//  display: flex;
-// position: absolute;
-// top: -15%; 
-//   background-color: #000;
-// `;
-
-// export const Input = styled.input`
-//   width: 250px;
-//   height: 30px;
-//   text-align: center;
-//   background-color: transparent;
-//   border-radius: 10px;
-//   color: #ffffff;
-//   font-size: 14px;
-//   letter-spacing: 0.28px;
-// `;
-
 export const InputBox = styled.div`
-width: 250px;
- display: flex;
- margin-top: 25px;
- margin-bottom: 25px;
+  width: 250px;
+  display: flex;
+  margin-top: 25px;
+  margin-bottom: 25px;
   background-color: #000;
 `;
 
@@ -175,29 +164,21 @@ export const TdTable = styled.td`
 
 export const Icon = styled.svg`
   position: absolute;
-  top: 36%;
-  right: 38%;
+  top: 32%;
+  right: 35%;
   cursor: pointer;
-  `
-
-// export const IconYes = styled.svg`
-// position: absolute;
-// top: 25%;
-// right: 10%;
-// cursor: pointer;
-// `
+`;
 
 export const IconYes = styled.svg`
-position: absolute;
-top: 47%;
-right: -27%;
-cursor: pointer;
-`
-
+  position: absolute;
+  top: 47%;
+  right: -27%;
+  cursor: pointer;
+`;
 
 export const IconPause = styled.svg`
-position: absolute;
-  left: 45%;
-  bottom: -32%;
-cursor: pointer;
-`
+  position: absolute;
+  left: 197%;
+  top: 30%;
+  cursor: pointer;
+`;
