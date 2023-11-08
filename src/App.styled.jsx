@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 
 export const AppContainer = styled.div`
   width: 500px;
@@ -21,7 +21,32 @@ export const Title = styled.h1`
   color: #ffffff;
   font-size: 250px;
   font-weight: 900;
+
+  opacity: 1;
+  transition: all 1s ease;
 `;
+
+const moveTitleRight = keyframes`
+  0% {
+    transform: translateX(0) scale(1);
+  }
+  100% {
+    transform: translateX(50%) scale(0.7);
+  }
+`;
+
+export const InGameTitle = styled(Title)`
+  position: absolute;
+  font-size: 140px;
+  top: 55px;
+  left: 107%;
+  transition: all 1s ease;
+  animation: ${moveTitleRight} 1s ease;
+`;
+
+InGameTitle.defaultProps = {
+ isStarted: false,
+};
 
 export const SnakeImg = styled.img`
   position: absolute;

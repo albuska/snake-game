@@ -27,6 +27,7 @@ import {
   PauseAndScoreBox,
   ScoreText,
   SnakeImg,
+  InGameTitle,
 } from "./App.styled";
 import { GlobalStyle } from "./components/GlobalStyles";
 import appleImg from "./assets/images/apple.png";
@@ -243,7 +244,8 @@ function App() {
   return (
     <div style={{position: "relative"}}>
        <SnakeImg src={snakeImg} alt="SnakeImg" />
-       {!isStarted &&  <Title>snake</Title>}
+       {!isStarted && <Title>snake</Title>}
+{isStarted && <InGameTitle inGame={isStarted}>snake</InGameTitle>}
       <AppContainer ref={playgroundRef}>
         <PauseAndScoreBox>
           {isStarted && (
