@@ -58,7 +58,7 @@ Error generating stack: `+i.message+`
 `,Zp=Q.h1`
   position: absolute;
   left: -90%;
-  top: 40%; 
+  top: 20%; 
   text-transform: uppercase;
   color: #ffffff;
   font-size: 250px;
