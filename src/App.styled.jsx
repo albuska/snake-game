@@ -16,7 +16,7 @@ export const AppContainer = styled.div`
 export const Title = styled.h1`
   position: absolute;
   left: -90%;
-  top: 40%; 
+  top: 20%; 
   text-transform: uppercase;
   color: #ffffff;
   font-size: 250px;
