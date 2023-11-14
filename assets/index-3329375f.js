@@ -84,7 +84,7 @@ Error generating stack: `+i.message+`
   position: absolute;
   left: -90%;
   top: 10%;
-  width: 400px;
+  width: 350px;
 `,og=Q.div`
   position: absolute;
   top: -10%;
