@@ -37,7 +37,7 @@ const moveTitleRight = keyframes`
 
 export const InGameTitle = styled(Title)`
   position: absolute;
-  font-size: 140px;
+  font-size: 110px;
   top: 55px;
   left: 107%;
   transition: all 1s ease;
