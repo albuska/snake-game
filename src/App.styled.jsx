@@ -206,7 +206,7 @@ export const TdTable = styled.td`
 
 export const Icon = styled.svg`
   position: absolute;
-  top: 31%;
+  top: 35%;
   right: 38%;
   cursor: pointer;
 `;
