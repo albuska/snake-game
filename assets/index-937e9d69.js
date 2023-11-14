@@ -198,8 +198,8 @@ Error generating stack: `+i.message+`
   font-size: 14px;
 `,gg=Q.svg`
   position: absolute;
-  top: 32%;
-  right: 35%;
+  top: 36%;
+  right: 38%;
   cursor: pointer;
 `,vg=Q.svg`
   position: absolute;
