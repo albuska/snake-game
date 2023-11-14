@@ -75,7 +75,7 @@ Error generating stack: `+i.message+`
   }
 `,bp=Q(Zp)`
   position: absolute;
-  font-size: 140px;
+  font-size: 110px;
   top: 55px;
   left: 107%;
   transition: all 1s ease;
