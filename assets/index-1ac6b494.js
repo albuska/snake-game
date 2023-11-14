@@ -71,11 +71,11 @@ Error generating stack: `+i.message+`
     transform: translateX(0) scale(1);
   }
   100% {
-    transform: translateX(50%) scale(0.7);
+    transform: translateX(20%) scale(0.7);
   }
 `,bp=Q(Zp)`
   position: absolute;
-  font-size: 110px;
+  font-size: 150px;
   top: 55px;
   left: 107%;
   transition: all 1s ease;
@@ -84,7 +84,7 @@ Error generating stack: `+i.message+`
   position: absolute;
   left: -90%;
   top: 10%;
-  width: 350px;
+  width: 400px;
 `,og=Q.div`
   position: absolute;
   top: -10%;
