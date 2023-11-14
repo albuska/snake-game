@@ -52,7 +52,7 @@ export const SnakeImg = styled.img`
   position: absolute;
   left: -90%;
   top: 10%;
-  width: 400px;
+  width: 350px;
 `;
 
 export const PauseAndScoreBox = styled.div`
