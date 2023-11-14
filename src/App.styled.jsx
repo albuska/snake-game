@@ -41,11 +41,11 @@ export const InGameTitle = styled(Title)`
   top: 55px;
   left: 107%;
   transition: all 1s ease;
-  animation: ${moveTitleRight} 1s ease;
+  animation: ${props => props.$inGame ? moveTitleRight : 'none'} 1s ease;
 `;
 
 InGameTitle.defaultProps = {
- isStarted: false,
+$inGame: false,
 };
 
 export const SnakeImg = styled.img`
@@ -206,7 +206,7 @@ export const TdTable = styled.td`
 
 export const Icon = styled.svg`
   position: absolute;
-  top: 36%;
+  top: 31%;
   right: 38%;
   cursor: pointer;
 `;

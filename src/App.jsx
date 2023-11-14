@@ -241,7 +241,7 @@ function App() {
     <div style={{position: "relative"}}>
        <SnakeImg src={snakeImg} alt="SnakeImg" />
        {!isStarted && <Title>snake</Title>}
-{isStarted && <InGameTitle inGame={isStarted}>snake</InGameTitle>}
+{isStarted && <InGameTitle $inGame={isStarted}>snake</InGameTitle>}
       <AppContainer ref={playgroundRef}>
         <PauseAndScoreBox>
           {isStarted && (
