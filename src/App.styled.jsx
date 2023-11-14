@@ -31,13 +31,13 @@ const moveTitleRight = keyframes`
     transform: translateX(0) scale(1);
   }
   100% {
-    transform: translateX(50%) scale(0.7);
+    transform: translateX(20%) scale(0.7);
   }
 `;
 
 export const InGameTitle = styled(Title)`
   position: absolute;
-  font-size: 110px;
+  font-size: 150px;
   top: 55px;
   left: 107%;
   transition: all 1s ease;
@@ -52,7 +52,7 @@ export const SnakeImg = styled.img`
   position: absolute;
   left: -90%;
   top: 10%;
-  width: 350px;
+  width: 400px;
 `;
 
 export const PauseAndScoreBox = styled.div`
