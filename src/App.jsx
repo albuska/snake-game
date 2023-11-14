@@ -62,12 +62,12 @@ const initialSnake = {
     { x: 8, y: 0 },
   ],
   direction: "ArrowRight",
-  speed: 200,
+  speed: 300,
 };
 
 function App() {
   const [snake, setSnake] = useState(initialSnake.snake);
-  const [lastDirection, setLastDirection] = useState(initialSnake.direction);
+  const [lastDirection, setLastDirection] = useState(initialSnake.direction); 
   const [foodPosition, setFoodPosition] = useState(randomFoodPosition);
   const [isStarted, setIsStarted] = useState(false);
   const [gameOver, setGameOver] = useState(false);
@@ -106,10 +106,12 @@ function App() {
       setLastDirection(initialSnake.direction);
       setPlayerName("");
       setTotalScore(0);
+      setEatenFruits(0); 
     } catch (error) {
       console.error("Server error:", error);
     }
   };
+
 
   const togglePause = () => {
     setIsPaused((prev) => !prev);
@@ -208,7 +210,6 @@ function App() {
     }
 
     let speed = initialSnake.speed;
-
     if (totalScore <= 50) {
       speed -= 0;
     } else if (totalScore <= 100) {
@@ -217,19 +218,14 @@ function App() {
       speed -= 100;
     }
 
+  if(gameOver) {
+    speed = initialSnake.speed; 
+  }
+
     const interval = setInterval(move, speed);
 
     return () => clearInterval(interval);
-  }, [
-    eatenFruits,
-    foodPosition.x,
-    foodPosition.y,
-    isPaused,
-    isStarted,
-    lastDirection,
-    snake,
-    totalScore,
-  ]);
+  }, [eatenFruits, foodPosition.x, foodPosition.y, gameOver, isPaused, isStarted, lastDirection, snake, totalScore]);
 
   useEffect(() => {
     if (eatenFruits === 1) {
